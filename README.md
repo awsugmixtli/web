@@ -13,7 +13,8 @@ Este sitio web está diseñado para:
 ## 🛠️ Tecnologías
 
 - Frontend: HTML
-- Estilos: Bootstrap
+- Estilos: CSS personalizado (sin dependencias externas)
+- Datos: Meetup GraphQL API (próximo evento en tiempo real)
 - CI/CD: GitHub Actions
 
 ## 🤝 Contribuciones
