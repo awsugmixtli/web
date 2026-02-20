@@ -1,0 +1,12 @@
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is git-ignored — never commit real values.
+
+aws_region      = "us-east-1"
+domain_name     = "awsugmixtli.com"
+route53_zone_id = "ZXXXXXXXXXXXXXXXXXXXX"   # Your hosted zone ID
+to_email        = "hola@awsugmixtli.com"    # Where form submissions are sent
+from_email      = "noreply@awsugmixtli.com" # SES-verified sender
+
+# Optional overrides
+# environment            = "production"
+# cloudfront_price_class = "PriceClass_100"

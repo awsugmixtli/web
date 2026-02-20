@@ -1,0 +1,235 @@
+/* ═══════════════════════════════════════════════════════════
+   SPONSOR PAGE — Additional styles
+   Builds on top of style.css
+═══════════════════════════════════════════════════════════ */
+
+/* ── Sponsor Hero ───────────────────────────────────────── */
+.sponsor-hero {
+  position: relative;
+  min-height: 60svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + 64px) clamp(20px, 5vw, 48px) 80px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #0F1520 0%, #1A1040 50%, #161E2D 100%);
+  text-align: center;
+}
+.sponsor-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(161,102,255,0.15) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(161,102,255,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.sponsor-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 760px;
+}
+.sponsor-hero-title {
+  font-family: var(--font-ember-heavy);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--color-white);
+  line-height: 1.15;
+}
+.sponsor-hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  max-width: 580px;
+}
+
+/* ── Benefits grid ──────────────────────────────────────── */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.benefit-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+.benefit-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--color-border);
+}
+.benefit-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-purple);
+  flex-shrink: 0;
+}
+.benefit-icon svg { width: 100%; height: 100%; }
+.benefit-title {
+  font-family: var(--font-ember-bold);
+  font-size: 1.1rem;
+  color: var(--color-white);
+}
+.benefit-text {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+/* ── Contact form ───────────────────────────────────────── */
+.sponsor-form {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-label {
+  font-family: var(--font-ember-bold);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  letter-spacing: .02em;
+}
+.form-required {
+  color: var(--color-purple);
+  margin-left: 2px;
+}
+.form-input {
+  background: var(--color-surface-2);
+  border: 1.5px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-family: var(--font-ember);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.form-input::placeholder { color: var(--color-text-faint); }
+.form-input:focus {
+  border-color: var(--color-purple);
+  box-shadow: 0 0 0 3px rgba(161,102,255,0.15);
+}
+.form-input.has-error {
+  border-color: #E05252;
+  box-shadow: 0 0 0 3px rgba(224,82,82,0.12);
+}
+.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B93A7' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px;
+  padding-right: 40px;
+}
+.form-select option { background: var(--color-surface-3); color: var(--color-text); }
+.form-textarea { resize: vertical; min-height: 130px; }
+.form-error {
+  font-size: 0.78rem;
+  color: #E05252;
+  min-height: 1em;
+}
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 4px;
+}
+.form-note {
+  font-size: 0.78rem;
+  color: var(--color-text-faint);
+}
+.form-submit {
+  min-width: 180px;
+  justify-content: center;
+}
+.form-submit:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Success & error states — shared layout */
+.form-success,
+.form-error-state {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 56px 24px;
+  animation: fade-in .4s ease;
+}
+.form-success-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--color-purple);
+}
+.form-success h3 {
+  font-family: var(--font-ember-heavy);
+  font-size: 1.5rem;
+  color: var(--color-white);
+}
+.form-success p {
+  color: var(--color-text-muted);
+  max-width: 420px;
+  line-height: 1.7;
+}
+
+/* Error state */
+.form-error-icon {
+  width: 52px;
+  height: 52px;
+  color: #E05252;
+}
+.form-error-state h3 {
+  font-family: var(--font-ember-heavy);
+  font-size: 1.5rem;
+  color: var(--color-white);
+}
+.form-error-state p {
+  color: var(--color-text-muted);
+  max-width: 440px;
+  line-height: 1.7;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .form-row { grid-template-columns: 1fr; }
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .form-submit { width: 100%; }
+}

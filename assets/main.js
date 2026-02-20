@@ -65,7 +65,11 @@ window.addEventListener('scroll', () => {
   skeleton.hidden = false;
 
   try {
-    const res = await fetch('https://www.meetup.com/awsugmixtli/events/ical');
+    // Meetup's iCal endpoint doesn't include CORS headers, so we route the
+    // request through a public CORS proxy. Replace this URL with your own
+    // proxy or serverless function when one is available.
+    const ICAL_URL = 'https://www.meetup.com/awsugmixtli/events/ical';
+    const res = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(ICAL_URL)}`);
     if (!res.ok) throw new Error('Feed unavailable');
     const raw = unfold(await res.text());
 
