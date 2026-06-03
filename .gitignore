@@ -1,0 +1,26 @@
+# Build output
+dist/
+
+# Node
+node_modules/
+package-lock.json
+
+# Lambda build artifacts (generated during deploy)
+lambda/*.zip
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+terraform/*.zip
+
+# macOS
+.DS_Store
+assets/.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
