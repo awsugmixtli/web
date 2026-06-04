@@ -5,10 +5,8 @@ on:
     branches: [main]
   schedule:
     # Daily safety-net rebuild at 06:00 UTC (01:00 CDT / 00:00 CST)
+    # Flips upcoming → past events without a content push.
     - cron: '0 6 * * *'
-  repository_dispatch:
-    # Immediate trigger from ics_sync Lambda when Meetup calendar changes
-    types: [meetup-changed]
   workflow_dispatch:
 
 # Minimal permissions — OIDC token for AWS auth, read for checkout.
@@ -87,11 +85,9 @@ jobs:
           filters: |
             sponsor:
               - 'lambda/index.py'
-            ics_sync:
-              - 'lambda/ics_sync.py'
 
       - name: Configure AWS credentials
-        if: steps.filter.outputs.sponsor == 'true' || steps.filter.outputs.ics_sync == 'true'
+        if: steps.filter.outputs.sponsor == 'true'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
@@ -104,11 +100,3 @@ jobs:
           aws lambda update-function-code \
             --function-name mixtli-sponsor-form \
             --zip-file fileb:///tmp/index.zip
-
-      - name: Deploy ICS sync Lambda
-        if: steps.filter.outputs.ics_sync == 'true'
-        run: |
-          zip -j /tmp/ics_sync.zip lambda/ics_sync.py
-          aws lambda update-function-code \
-            --function-name mixtli-ics-sync \
-            --zip-file fileb:///tmp/ics_sync.zip

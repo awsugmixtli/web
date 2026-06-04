@@ -56,63 +56,6 @@ resource "aws_iam_role_policy" "lambda_ses" {
 data "aws_caller_identity" "current" {}
 
 ###############################################################################
-# IAM — ICS Sync Lambda execution role with SSM read/write permission
-###############################################################################
-
-resource "aws_iam_role" "ics_sync" {
-  name               = "mixtli-ics-sync-lambda"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-
-  tags = {
-    Environment = var.environment
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "ics_sync_basic_execution" {
-  role       = aws_iam_role.ics_sync.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-data "aws_iam_policy_document" "ics_sync_ssm" {
-  # Read the GitHub PAT and read/write the event fingerprint state
-  statement {
-    sid    = "AllowSSMReadWrite"
-    effect = "Allow"
-
-    actions = [
-      "ssm:GetParameter",
-      "ssm:PutParameter",
-    ]
-    resources = [
-      aws_ssm_parameter.github_pat.arn,
-      aws_ssm_parameter.ics_sync_state.arn,
-    ]
-  }
-
-  # Decrypt SSM SecureString parameters (using the AWS-managed SSM key)
-  statement {
-    sid     = "AllowSSMDecrypt"
-    effect  = "Allow"
-    actions = ["kms:Decrypt"]
-
-    # Wildcard is required for the AWS-managed key; scoped to SSM via condition
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["ssm.${var.aws_region}.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role_policy" "ics_sync_ssm" {
-  name   = "ssm-ics-sync"
-  role   = aws_iam_role.ics_sync.id
-  policy = data.aws_iam_policy_document.ics_sync_ssm.json
-}
-
-###############################################################################
 # IAM — GitHub Actions OIDC deploy role (no long-lived keys)
 ###############################################################################
 
@@ -140,11 +83,8 @@ resource "aws_iam_role" "github_deploy" {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
         }
         StringLike = {
-          # Allow main-branch pushes/schedule/workflow_dispatch AND
-          # repository_dispatch (which omits the ref in the sub claim)
           "token.actions.githubusercontent.com:sub" = [
             "repo:${var.github_org}/${var.github_repo}:ref:refs/heads/main",
-            "repo:${var.github_org}/${var.github_repo}:",
           ]
         }
       }
@@ -184,13 +124,10 @@ resource "aws_iam_role_policy" "github_deploy" {
         Resource = aws_cloudfront_distribution.site.arn
       },
       {
-        Sid    = "LambdaDeploy"
-        Effect = "Allow"
-        Action = "lambda:UpdateFunctionCode"
-        Resource = [
-          aws_lambda_function.sponsor_form.arn,
-          aws_lambda_function.ics_sync.arn,
-        ]
+        Sid      = "LambdaDeploy"
+        Effect   = "Allow"
+        Action   = "lambda:UpdateFunctionCode"
+        Resource = [aws_lambda_function.sponsor_form.arn]
       },
     ]
   })
