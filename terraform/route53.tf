@@ -33,27 +33,11 @@ resource "aws_route53_record" "apex_aaaa" {
   }
 }
 
-# www → apex redirect via CloudFront alias
-resource "aws_route53_record" "www_a" {
+# www → apex CNAME (matches the existing record in Route 53)
+resource "aws_route53_record" "www_cname" {
   zone_id = data.aws_route53_zone.site.zone_id
   name    = "www.${var.domain_name}"
-  type    = "A"
-
-  alias {
-    name                   = aws_cloudfront_distribution.site.domain_name
-    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
-    evaluate_target_health = false
-  }
-}
-
-resource "aws_route53_record" "www_aaaa" {
-  zone_id = data.aws_route53_zone.site.zone_id
-  name    = "www.${var.domain_name}"
-  type    = "AAAA"
-
-  alias {
-    name                   = aws_cloudfront_distribution.site.domain_name
-    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
-    evaluate_target_health = false
-  }
+  type    = "CNAME"
+  ttl     = 300
+  records = [var.domain_name]
 }

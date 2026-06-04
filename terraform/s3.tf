@@ -2,8 +2,12 @@
 # S3 — Static site origin bucket
 ###############################################################################
 
+locals {
+  s3_bucket_name = var.s3_bucket_name != "" ? var.s3_bucket_name : var.domain_name
+}
+
 resource "aws_s3_bucket" "site" {
-  bucket = var.domain_name
+  bucket = local.s3_bucket_name
 
   tags = {
     Name        = "${var.domain_name}-site"

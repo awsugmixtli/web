@@ -14,6 +14,12 @@ variable "domain_name" {
   default     = "awsugmixtli.com"
 }
 
+variable "s3_bucket_name" {
+  description = "S3 bucket name for the static site. Defaults to domain_name but may differ (e.g. 'awsugmixtli' vs 'awsugmixtli.com')."
+  type        = string
+  default     = ""
+}
+
 variable "to_email" {
   description = "Recipient address for sponsor contact form submissions."
   type        = string
