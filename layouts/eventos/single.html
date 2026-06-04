@@ -1,0 +1,83 @@
+{{ define "main" }}
+<article class="event-page">
+  <div class="container">
+
+    {{ partial "breadcrumb.html" . }}
+
+    <header class="event-header">
+      <h1 class="event-hero-title">{{ .Title }}</h1>
+      <div class="event-hero-meta">
+        <span class="event-meta-item">📅 {{ .Date | time.Format "2 January 2006" }}</span>
+        <span class="event-meta-sep">·</span>
+        <span class="event-meta-item">🕕 {{ .Date | time.Format "3:04 PM" }}</span>
+        {{ with .Params.venue }}
+        <span class="event-meta-sep">·</span>
+        <span class="event-meta-item">📍 {{ . }}{{ with $.Params.locality }}, {{ . }}{{ end }}</span>
+        {{ end }}
+      </div>
+
+      {{ with .Params.tags }}
+      <div class="event-tags">
+        {{ range . }}
+        <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+
+      <div class="event-ctas">
+        {{ with .Params.meetup_url }}
+        <a href="{{ . }}" target="_blank" rel="noopener" class="btn btn-primary">
+          {{ if $.Date.After now }}Regístrate en Meetup{{ else }}Ver en Meetup ↗{{ end }}
+        </a>
+        {{ end }}
+        {{ with .Params.youtube_url }}
+        <a href="{{ . }}" target="_blank" rel="noopener" class="btn btn-ghost">Ver grabación ↗</a>
+        {{ end }}
+      </div>
+    </header>
+
+    {{ with .Params.speakers }}
+    <section class="event-section event-speakers-section">
+      <h2 class="event-section-title">{{ if gt (len .) 1 }}Ponentes{{ else }}Ponente{{ end }}</h2>
+      {{ partial "speakers.html" $ }}
+    </section>
+    {{ end }}
+
+    {{ with .Params.youtube_url }}
+    <section class="event-section">
+      <h2 class="event-section-title">Grabación</h2>
+      {{ partial "youtube-embed.html" $ }}
+    </section>
+    {{ end }}
+
+    <div class="event-body prose">
+      {{ .Content }}
+    </div>
+
+    {{ with .Params.gallery }}
+    {{ if gt (len .) 0 }}
+    <section class="event-section">
+      <h2 class="event-section-title">Galería</h2>
+      {{ partial "gallery.html" $ }}
+    </section>
+    {{ end }}
+    {{ end }}
+
+    <nav class="event-nav" aria-label="Eventos anterior y siguiente">
+      {{ with .PrevInSection }}
+      <a href="{{ .RelPermalink }}" class="event-nav-link event-nav-prev">
+        <span class="event-nav-dir">← Evento anterior</span>
+        <span class="event-nav-title">{{ .Title }}</span>
+      </a>
+      {{ end }}
+      {{ with .NextInSection }}
+      <a href="{{ .RelPermalink }}" class="event-nav-link event-nav-next">
+        <span class="event-nav-dir">Evento siguiente →</span>
+        <span class="event-nav-title">{{ .Title }}</span>
+      </a>
+      {{ end }}
+    </nav>
+
+  </div>
+</article>
+{{ end }}

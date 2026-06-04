@@ -1,0 +1,44 @@
+{{ define "main" }}
+{{- $isTopics := eq .Data.Plural "topics" }}
+<section class="section">
+  <div class="container">
+
+    {{ partial "breadcrumb.html" . }}
+
+    <header class="taxonomy-header">
+      <p class="taxonomy-kind">{{ if $isTopics }}Tema{{ else }}Etiqueta{{ end }}</p>
+      <h1 class="taxonomy-title">{{ .Title }}</h1>
+      <p class="taxonomy-count">
+        {{ len .Pages }}
+        {{ if eq (len .Pages) 1 }}entrada{{ else }}entradas{{ end }}
+      </p>
+    </header>
+
+    {{- $eventos  := where .Pages "Section" "eventos" }}
+    {{- $recursos := where .Pages "Section" "recursos" }}
+
+    {{ with $eventos }}
+    <div class="events-section">
+      {{ if $recursos }}<h2 class="events-section-title">Eventos</h2>{{ end }}
+      <div class="events-list">
+        {{- range sort . "Date" "desc" }}
+        {{ partial "event-card-row.html" . }}
+        {{- end }}
+      </div>
+    </div>
+    {{ end }}
+
+    {{ with $recursos }}
+    <div class="recursos-list-section">
+      {{ if $eventos }}<h2 class="events-section-title">Recursos</h2>{{ end }}
+      <ul class="page-list">
+        {{ range . }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+
+  </div>
+</section>
+{{ end }}

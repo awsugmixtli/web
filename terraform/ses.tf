@@ -26,7 +26,7 @@ resource "aws_sesv2_email_identity" "domain" {
 resource "aws_route53_record" "ses_dkim" {
   count = 3
 
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = "${aws_sesv2_email_identity.domain.dkim_signing_attributes[0].tokens[count.index]}._domainkey.${var.domain_name}"
   type    = "CNAME"
   ttl     = 1800
@@ -41,7 +41,7 @@ resource "aws_sesv2_email_identity_mail_from_attributes" "domain" {
 
 # MX record for MAIL FROM subdomain
 resource "aws_route53_record" "ses_mail_from_mx" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = "mail.${var.domain_name}"
   type    = "MX"
   ttl     = 300
@@ -50,7 +50,7 @@ resource "aws_route53_record" "ses_mail_from_mx" {
 
 # SPF TXT record for MAIL FROM subdomain
 resource "aws_route53_record" "ses_mail_from_spf" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = "mail.${var.domain_name}"
   type    = "TXT"
   ttl     = 300
@@ -59,7 +59,7 @@ resource "aws_route53_record" "ses_mail_from_spf" {
 
 # ── DMARC TXT record (recommended) ───────────────────────
 resource "aws_route53_record" "dmarc" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = "_dmarc.${var.domain_name}"
   type    = "TXT"
   ttl     = 300

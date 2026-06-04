@@ -1,0 +1,39 @@
+<!-- Canonical & hreflang -->
+<link rel="canonical" href="{{ .Permalink }}">
+<link rel="alternate" hreflang="es-MX" href="{{ .Permalink }}">
+<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+
+<!-- Meta description & keywords -->
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+{{ with .Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
+<meta name="apple-mobile-web-app-title" content="AWS UG Mixtli">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="AWS User Group Mixtli">
+<meta property="og:locale" content="es_MX">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Title }}{{ else }}{{ .Title }} | AWS UG Mixtli{{ end }}">
+<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+{{ $ogImage := "/assets/og-image.png" }}
+{{ with .Params.og_image }}{{ if . }}{{ $ogImage = . }}{{ end }}{{ end }}
+<meta property="og:image" content="{{ if hasPrefix $ogImage "http" }}{{ $ogImage }}{{ else }}{{ absURL $ogImage }}{{ end }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+{{ if or (eq .Section "eventos") (eq .Section "recursos") }}
+<meta property="og:type" content="article">
+{{ with .Date }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+{{ with .Params.lastmod }}<meta property="article:modified_time" content="{{ . }}">{{ end }}
+{{ range .Params.tags }}<meta property="article:tag" content="{{ . }}">{{ end }}
+<meta property="article:author" content="AWS UG Mixtli">
+{{ else }}
+<meta property="og:type" content="website">
+{{ end }}
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@awsugmixtli">
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Title }}{{ else }}{{ .Title }} | AWS UG Mixtli{{ end }}">
+<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+<meta name="twitter:image" content="{{ if hasPrefix $ogImage "http" }}{{ $ogImage }}{{ else }}{{ absURL $ogImage }}{{ end }}">
+<meta name="twitter:image:alt" content="AWS User Group Mixtli — Cholula, Puebla, México">

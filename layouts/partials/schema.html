@@ -1,0 +1,33 @@
+{{ partial "schema-org.html" . }}
+{{ if .IsHome }}
+  {{- $now := now }}
+  {{- $upcoming := where (where site.RegularPages "Section" "eventos") "Date" "gt" $now }}
+  {{- $upcoming = sort $upcoming "Date" "asc" }}
+  {{- with index $upcoming 0 }}
+    {{ partial "schema-event.html" . }}
+  {{- end }}
+{{ else if eq .Section "eventos" }}
+  {{ if .IsPage }}
+    {{ partial "schema-event.html" . }}
+    {{ with .Params.youtube_url }}{{ partial "schema-video.html" $ }}{{ end }}
+  {{ else }}
+    {{ partial "schema-itemlist.html" . }}
+  {{ end }}
+{{ else if eq .Section "recursos" }}
+  {{ if .IsPage }}
+    {{ partial "schema-article.html" . }}
+  {{ else }}
+    {{ partial "schema-itemlist.html" . }}
+  {{ end }}
+{{ else if eq .Section "patrocinar" }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": {{ .Title | jsonify }},
+  "url": "{{ .Permalink }}",
+  "description": {{ .Description | jsonify }},
+  "isPartOf": { "@id": "https://awsugmixtli.com/#website" }
+}
+</script>
+{{ end }}

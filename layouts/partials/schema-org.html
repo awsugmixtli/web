@@ -1,0 +1,46 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://awsugmixtli.com/#organization",
+      "name": "AWS User Group Mixtli",
+      "url": "https://awsugmixtli.com/",
+      "logo": "https://awsugmixtli.com/assets/logo-mixtli.avif",
+      "image": "https://awsugmixtli.com/assets/og-image.png",
+      "description": "Comunidad vibrante de profesionales, estudiantes y entusiastas de Amazon Web Services en Cholula, Puebla, México.",
+      "foundingDate": "2024",
+      "location": {
+        "@type": "Place",
+        "name": "Cholula, Puebla, México",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Cholula",
+          "addressRegion": "Puebla",
+          "addressCountry": "MX"
+        }
+      },
+      "sameAs": [
+        {{- $social := hugo.Data.social }}
+        {{- $sameas := slice }}
+        {{- range $social }}
+          {{- if not .exclude_from_sameas }}
+            {{- $sameas = $sameas | append .url }}
+          {{- end }}
+        {{- end }}
+        {{- range $i, $url := $sameas }}{{ if $i }},{{ end }}{{ $url | jsonify }}{{ end }}
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://awsugmixtli.com/#website",
+      "url": "https://awsugmixtli.com/",
+      "name": "AWS User Group Mixtli",
+      "description": "Comunidad de Amazon Web Services en Cholula, Puebla, México.",
+      "publisher": { "@id": "https://awsugmixtli.com/#organization" },
+      "inLanguage": "es-MX"
+    }
+  ]
+}
+</script>

@@ -1,0 +1,210 @@
+{{ define "main" }}
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-pattern" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="hero-logo-col">
+        <img src="/assets/logo-mixtli.avif" alt="AWS User Group Mixtli logo" class="hero-logo">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Cholula, Puebla · México
+        </div>
+      </div>
+      <div class="hero-text-col">
+        <h1 class="hero-title">
+          <span class="hero-title-sub">AWS User Group</span>
+          <span class="hero-title-main">Mixtli</span>
+        </h1>
+        <p class="hero-tagline">Aprende, conecta y crece en AWS —<br>desde Cholula para México.</p>
+        <div class="hero-actions">
+          <a href="https://www.meetup.com/awsugmixtli/" target="_blank" rel="noopener" class="btn btn-primary">
+            Únete al grupo
+          </a>
+          <a href="#about" class="btn btn-ghost">Conoce más</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       STATS BAR
+  ═══════════════════════════════════════ -->
+  <section class="stats-bar" aria-label="Estadísticas de la comunidad">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">{{ .Params.stats.members | default "400+" }}</span>
+          <span class="stat-label">Miembros</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-number">{{ .Params.stats.events | default "15+" }}</span>
+          <span class="stat-label">Eventos realizados</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-number">{{ .Params.stats.rating | default "4.9" }}<span class="stat-star">★</span></span>
+          <span class="stat-label">Calificación en Meetup</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-number">{{ .Params.stats.founded | default "2024" }}</span>
+          <span class="stat-label">Fundado</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       ABOUT
+  ═══════════════════════════════════════ -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Quiénes somos</span>
+        <h2 class="section-title">Una comunidad para<br>quienes construyen en AWS</h2>
+        <p class="section-subtitle">
+          AWS User Group Mixtli es un espacio abierto para profesionales, estudiantes y entusiastas
+          que quieren aprender, compartir y crecer juntos en el ecosistema de Amazon Web Services.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Aprende</h3>
+          <p class="pillar-text">Charlas técnicas, talleres prácticos y casos de uso reales presentados por expertos de la industria.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Comparte</h3>
+          <p class="pillar-text">Un ambiente abierto y seguro para intercambiar ideas, experiencias y mejores prácticas con la comunidad.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Conéctate</h3>
+          <p class="pillar-text">Networking con profesionales, líderes de la industria y entusiastas de AWS que comparten tu pasión.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Crece</h3>
+          <p class="pillar-text">Impulsa tu carrera en la nube con recursos, certificaciones y oportunidades que solo la comunidad puede brindarte.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       TOPICS
+  ═══════════════════════════════════════ -->
+  <section class="section section-dark" id="topics">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Lo que exploramos</span>
+        <h2 class="section-title">Temas que nos apasionan</h2>
+      </div>
+      <div class="topics-grid">
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">☁️</span> Arquitectura Cloud</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">⚙️</span> DevOps &amp; CI/CD</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">⚡</span> Serverless</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">🔒</span> Seguridad en AWS</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">🤖</span> Machine Learning</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">💰</span> FinOps &amp; Cost Optimization</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">🗄️</span> Bases de datos</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">📦</span> Contenedores &amp; Kubernetes</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">📊</span> Analytics &amp; Big Data</div>
+        <div class="topic-chip"><span class="topic-icon" aria-hidden="true">🌐</span> Networking &amp; CDN</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       NEXT EVENT
+  ═══════════════════════════════════════ -->
+  <section class="section" id="next-event">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">No te lo pierdas</span>
+        <h2 class="section-title">Próximo Evento</h2>
+      </div>
+      <div class="event-card">
+        {{ partial "next-event.html" . }}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SPONSORS
+  ═══════════════════════════════════════ -->
+  <section class="section section-dark" id="sponsors">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Patrocinadores</span>
+        <h2 class="section-title">Quiénes hacen posible la comunidad</h2>
+        <p class="section-subtitle">
+          ¿Tu empresa quiere apoyar a la comunidad AWS en Puebla?
+          Escríbenos para conocer las opciones de patrocinio.
+        </p>
+      </div>
+      <div class="sponsors-placeholder">
+        <div class="sponsor-logos">
+          {{ range hugo.Data.sponsors }}
+          <a href="{{ .url }}" target="_blank" rel="noopener{{ if not (hasPrefix .url "https://awsugmixtli.com") }} noreferrer{{ end }}">
+            <img fetchpriority="low" loading="lazy" src="/assets/{{ .logo }}" alt="{{ .alt }}">
+          </a>
+          {{ end }}
+        </div>
+        <a href="/patrocinar/" class="sponsor-cta-btn">
+          Contáctanos para patrocinar
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       COMMUNITY / SOCIAL LINKS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="community">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Únete a la conversación</span>
+        <h2 class="section-title">Encuéntranos en redes</h2>
+        <p class="section-subtitle">Sé parte de la comunidad. Síguenos, únete y comparte.</p>
+      </div>
+      <div class="social-grid">
+        {{ range hugo.Data.social }}
+        <a href="{{ .url }}" target="_blank" rel="noopener" class="social-card">
+          <div class="social-card-icon">
+            <img src="/assets/{{ .icon }}" alt="" aria-hidden="true" loading="lazy" class="social-icon">
+          </div>
+          <div class="social-card-body">
+            <span class="social-card-name">{{ .name }}</span>
+            <span class="social-card-desc">{{ .desc }}</span>
+          </div>
+          <div class="social-card-arrow" aria-hidden="true">→</div>
+        </a>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+
+{{ end }}

@@ -1,0 +1,25 @@
+{{ with .Params.youtube_url }}
+{{- $videoID := "" }}
+{{- if findRE `youtu\.be/([^?&]+)` . }}
+  {{- $videoID = replaceRE `.*youtu\.be/([^?&]+).*` "$1" . }}
+{{- else if findRE `[?&]v=([^&]+)` . }}
+  {{- $videoID = replaceRE `.*[?&]v=([^&]+).*` "$1" . }}
+{{- else if findRE `youtube\.com/embed/([^?&]+)` . }}
+  {{- $videoID = replaceRE `.*youtube\.com/embed/([^?&]+).*` "$1" . }}
+{{- end }}
+{{- if $videoID }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": {{ $.Title | jsonify }},
+  "description": {{ $.Description | jsonify }},
+  "thumbnailUrl": "https://i.ytimg.com/vi/{{ $videoID }}/hqdefault.jpg",
+  "uploadDate": "{{ $.Date.Format "2006-01-02" }}",
+  "embedUrl": "https://www.youtube-nocookie.com/embed/{{ $videoID }}",
+  "url": "https://www.youtube.com/watch?v={{ $videoID }}",
+  "publisher": { "@id": "https://awsugmixtli.com/#organization" }
+}
+</script>
+{{- end }}
+{{ end }}

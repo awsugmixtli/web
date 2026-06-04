@@ -29,7 +29,7 @@ resource "aws_route53_record" "acm_validation" {
     }
   }
 
-  zone_id         = var.route53_zone_id
+  zone_id         = data.aws_route53_zone.site.zone_id
   name            = each.value.name
   type            = each.value.type
   records         = [each.value.record]

@@ -7,9 +7,10 @@
 #   • ACM certificate in us-east-1 (required for CloudFront)
 #   • Route 53 records (A + AAAA alias to CloudFront, CNAME for ACM validation)
 #   • SES email identity & DKIM (sender domain verification)
-#   • Lambda function + Function URL (sponsor contact form)
-#   • IAM role & policy for the Lambda (ses:SendEmail)
-#   • CloudWatch Log Group for Lambda logs
+#   • Lambda + Function URL (sponsor contact form, SES)
+#   • Lambda + EventBridge weekly rule (ICS sync → S3 JSON)
+#   • IAM roles & policies for both Lambdas (least privilege)
+#   • CloudWatch Log Groups for both Lambdas
 ###############################################################################
 
 terraform {
@@ -23,6 +24,10 @@ terraform {
     archive = {
       source  = "hashicorp/archive"
       version = "~> 2.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
     }
   }
 

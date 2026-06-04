@@ -1,0 +1,32 @@
+{{ with .Params.speakers }}
+<div class="speakers-grid">
+  {{ range . }}
+  {{- $speaker := . }}
+  <div class="speaker-card-hero">
+    <div class="speaker-avatar-wrap">
+      {{ with .photo }}
+        {{ $img := $.Page.Resources.GetMatch . }}
+        {{ if $img }}
+          {{ $thumb := $img.Fill "160x160 webp" }}
+          <img src="{{ $thumb.RelPermalink }}" alt="{{ $speaker.name }}" class="speaker-avatar" loading="lazy" width="160" height="160">
+        {{ else }}
+          <div class="speaker-avatar-placeholder">{{ substr $speaker.name 0 1 }}</div>
+        {{ end }}
+      {{ else }}
+        <div class="speaker-avatar-placeholder">{{ substr $speaker.name 0 1 }}</div>
+      {{ end }}
+    </div>
+    <div class="speaker-details">
+      <span class="speaker-name-lg">{{ $speaker.name }}</span>
+      {{ with $speaker.role }}<span class="speaker-role-lg">{{ . }}</span>{{ end }}
+      {{ with $speaker.bio }}<p class="speaker-bio">{{ . }}</p>{{ end }}
+      {{ with $speaker.linkedin }}
+      <a href="{{ . }}" target="_blank" rel="noopener" class="speaker-social-link" aria-label="LinkedIn de {{ $speaker.name }}">
+        LinkedIn ↗
+      </a>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+</div>
+{{ end }}

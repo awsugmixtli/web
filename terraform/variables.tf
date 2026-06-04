@@ -14,11 +14,6 @@ variable "domain_name" {
   default     = "awsugmixtli.com"
 }
 
-variable "route53_zone_id" {
-  description = "Route 53 Hosted Zone ID for var.domain_name."
-  type        = string
-}
-
 variable "to_email" {
   description = "Recipient address for sponsor contact form submissions."
   type        = string
@@ -35,10 +30,28 @@ variable "environment" {
   default     = "production"
 }
 
-variable "cloudfront_price_class" {
-  description = "CloudFront price class. PriceClass_100 = US/Europe only (cheapest)."
+variable "github_org" {
+  description = "GitHub organization that owns the repository."
   type        = string
-  default     = "PriceClass_100"
+  default     = "awsugmixtli"
+}
+
+variable "github_repo" {
+  description = "GitHub repository name."
+  type        = string
+  default     = "web"
+}
+
+variable "web_acl_id" {
+  description = "ARN of a WAFv2 WebACL (must be in us-east-1) to attach to the CloudFront distribution. Leave empty to deploy without WAF — create the WebACL in the AWS Console first, then set this value and re-apply."
+  type        = string
+  default     = ""
+}
+
+variable "cloudfront_price_class" {
+  description = "CloudFront price class. PriceClass_All uses all edge locations (recommended with flat pricing — all regions now cost the same)."
+  type        = string
+  default     = "PriceClass_All"
 
   validation {
     condition     = contains(["PriceClass_All", "PriceClass_200", "PriceClass_100"], var.cloudfront_price_class)

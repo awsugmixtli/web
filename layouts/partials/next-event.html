@@ -1,0 +1,27 @@
+{{- $now := now }}
+{{- $upcoming := where (where site.RegularPages "Section" "eventos") "Date" "gt" $now }}
+{{- $upcoming = sort $upcoming "Date" "asc" }}
+{{- with index $upcoming 0 }}
+<div class="event-content">
+  <div class="event-meta">
+    <span class="event-date">{{ .Date | time.Format "Monday, 2 de January de 2006" }}</span>
+    <span class="event-time">{{ .Date | time.Format "3:04 PM" }}</span>
+  </div>
+  <h3 class="event-title">{{ .Title }}</h3>
+  {{ with .Params.venue }}<p class="event-venue">📍 {{ . }}</p>{{ end }}
+  <div class="event-ctas">
+    <a href="{{ .Params.meetup_url | default "https://www.meetup.com/awsugmixtli/" }}"
+       target="_blank" rel="noopener" class="btn btn-primary event-btn">
+      {{ if .Date.After now }}Regístrate en Meetup{{ else }}Ver en Meetup ↗{{ end }}
+    </a>
+    <a href="{{ .RelPermalink }}" class="btn btn-ghost event-btn">Ver detalles</a>
+  </div>
+</div>
+{{- else }}
+<div class="event-fallback">
+  <p class="event-fallback-text">Estamos preparando el próximo evento.<br>¡Síguenos en Meetup para ser el primero en enterarte!</p>
+  <a href="https://www.meetup.com/awsugmixtli/" target="_blank" rel="noopener" class="btn btn-primary">
+    Ver en Meetup
+  </a>
+</div>
+{{- end }}

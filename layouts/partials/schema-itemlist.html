@@ -1,0 +1,22 @@
+{{- $pages := .RegularPages }}
+{{- if gt (len $pages) 0 }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": {{ .Title | jsonify }},
+  "url": "{{ .Permalink }}",
+  "numberOfItems": {{ len $pages }},
+  "itemListElement": [
+    {{- range $i, $p := $pages }}{{ if $i }},{{ end }}
+    {
+      "@type": "ListItem",
+      "position": {{ add $i 1 }},
+      "url": "{{ $p.Permalink }}",
+      "name": {{ $p.Title | jsonify }}
+    }
+    {{- end }}
+  ]
+}
+</script>
+{{- end }}

@@ -1,0 +1,32 @@
+{{ define "main" }}
+{{- $isTopics := eq .Data.Plural "topics" }}
+<section class="section">
+  <div class="container container-narrow">
+
+    {{ partial "breadcrumb.html" . }}
+
+    <header class="section-header">
+      <h1 class="section-title">
+        {{ if $isTopics }}Temas{{ else }}Etiquetas{{ end }}
+      </h1>
+      <p class="section-subtitle">
+        {{ if $isTopics }}
+          Explora los temas técnicos que cubrimos en eventos y recursos.
+        {{ else }}
+          Todos los tags usados en eventos y recursos del sitio.
+        {{ end }}
+      </p>
+    </header>
+
+    <div class="terms-grid">
+      {{ range .Data.Terms.Alphabetical }}
+      <a href="{{ .Page.RelPermalink }}" class="term-chip-lg">
+        {{ .Page.Title }}
+        <span class="term-count">{{ .Count }}</span>
+      </a>
+      {{ end }}
+    </div>
+
+  </div>
+</section>
+{{ end }}

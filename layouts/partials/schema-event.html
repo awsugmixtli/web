@@ -1,0 +1,39 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": {{ .Title | jsonify }},
+  "startDate": "{{ .Date.Format "2006-01-02T15:04:05-07:00" }}",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": {{ default "Workósfera Coworking" .Params.venue | jsonify }},
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": {{ default "Cholula" .Params.locality | jsonify }},
+      "addressRegion": "Puebla",
+      "addressCountry": "MX"
+    }
+  },
+  "organizer": { "@id": "https://awsugmixtli.com/#organization" },
+  "description": {{ .Description | jsonify }},
+  "url": "{{ .Permalink }}",
+  "image": "{{ with .Params.og_image }}{{ if . }}{{ . }}{{ else }}https://awsugmixtli.com/assets/og-image.png{{ end }}{{ else }}https://awsugmixtli.com/assets/og-image.png{{ end }}"
+  {{- with .Params.attendees }},
+  "maximumAttendeeCapacity": {{ . }}{{ end }}
+  {{- if .Params.speakers }},
+  "performer": [
+    {{- range $i, $s := .Params.speakers }}{{ if $i }},{{ end }}
+    {
+      "@type": "Person",
+      "name": {{ $s.name | jsonify }}
+      {{- with $s.linkedin }},"sameAs": {{ . | jsonify }}{{ end }}
+    }
+    {{- end }}
+  ]
+  {{- end }},
+  "isPartOf": { "@id": "https://awsugmixtli.com/#website" }
+}
+</script>
+{{ if .IsPage }}{{ partial "schema-breadcrumb.html" . }}{{ end }}

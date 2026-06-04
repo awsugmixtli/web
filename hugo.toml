@@ -1,0 +1,30 @@
+baseURL = "https://awsugmixtli.com/"
+locale = "es-MX"
+defaultContentLanguage = "es"
+title = "AWS User Group Mixtli"
+
+publishDir = "dist"
+enableRobotsTXT = false
+enableGitInfo = false
+
+[minify]
+  minifyOutput = true
+
+[taxonomies]
+  tag = "tags"
+  topic = "topics"
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[outputFormats.LLMS]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+
+[outputs]
+  home = ["HTML", "RSS", "SITEMAP", "LLMS"]

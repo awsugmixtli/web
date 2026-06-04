@@ -1,6 +1,10 @@
 # Build output
 dist/
 
+# Hugo generated
+resources/_gen/
+.hugo_build.lock
+
 # Node
 node_modules/
 package-lock.json
@@ -15,6 +19,10 @@ terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
 terraform/terraform.tfvars
 terraform/*.zip
+
+# Working drafts (local reference, not part of the Hugo site)
+draft-*.md
+HUGO_MIGRATION_PLAN.md
 
 # macOS
 .DS_Store

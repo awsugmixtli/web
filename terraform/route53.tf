@@ -2,9 +2,14 @@
 # Route 53 — DNS records pointing to CloudFront
 ###############################################################################
 
+data "aws_route53_zone" "site" {
+  name         = var.domain_name
+  private_zone = false
+}
+
 # A record (IPv4) — apex domain
 resource "aws_route53_record" "apex_a" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = var.domain_name
   type    = "A"
 
@@ -17,7 +22,7 @@ resource "aws_route53_record" "apex_a" {
 
 # AAAA record (IPv6) — apex domain
 resource "aws_route53_record" "apex_aaaa" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = var.domain_name
   type    = "AAAA"
 
@@ -30,7 +35,7 @@ resource "aws_route53_record" "apex_aaaa" {
 
 # www → apex redirect via CloudFront alias
 resource "aws_route53_record" "www_a" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = "www.${var.domain_name}"
   type    = "A"
 
@@ -42,7 +47,7 @@ resource "aws_route53_record" "www_a" {
 }
 
 resource "aws_route53_record" "www_aaaa" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.site.zone_id
   name    = "www.${var.domain_name}"
   type    = "AAAA"
 

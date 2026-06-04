@@ -18,13 +18,18 @@ output "s3_bucket_name" {
 }
 
 output "lambda_function_url" {
-  description = "Lambda Function URL — paste this into assets/sponsor.js as SUBMIT_ENDPOINT."
+  description = "Raw Lambda Function URL (internal — traffic is proxied via CloudFront at /api/sponsor). Do NOT use this directly in frontend code."
   value       = aws_lambda_function_url.sponsor_form.function_url
 }
 
 output "ses_identity_arn" {
   description = "ARN of the SES domain identity."
   value       = aws_sesv2_email_identity.domain.arn
+}
+
+output "deploy_role_arn" {
+  description = "Set as AWS_DEPLOY_ROLE_ARN in GitHub Actions repository variables."
+  value       = aws_iam_role.github_deploy.arn
 }
 
 output "ses_dkim_tokens" {
