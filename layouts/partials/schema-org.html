@@ -21,16 +21,14 @@
           "addressCountry": "MX"
         }
       },
-      "sameAs": [
-        {{- $social := hugo.Data.social }}
-        {{- $sameas := slice }}
-        {{- range $social }}
-          {{- if not .exclude_from_sameas }}
-            {{- $sameas = $sameas | append .url }}
-          {{- end }}
+      {{- $social := hugo.Data.social }}
+      {{- $sameas := slice }}
+      {{- range $social }}
+        {{- if not .exclude_from_sameas }}
+          {{- $sameas = $sameas | append .url }}
         {{- end }}
-        {{- range $i, $url := $sameas }}{{ if $i }},{{ end }}{{ $url | jsonify }}{{ end }}
-      ]
+      {{- end }}
+      "sameAs": {{ $sameas | jsonify | safeJS }}
     },
     {
       "@type": "WebSite",

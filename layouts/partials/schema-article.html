@@ -2,8 +2,8 @@
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": {{ .Title | jsonify }},
-  "description": {{ .Description | jsonify }},
+  "headline": {{ .Title | jsonify | safeJS }},
+  "description": {{ .Description | jsonify | safeJS }},
   "url": "{{ .Permalink }}",
   "datePublished": "{{ .Date.Format "2006-01-02" }}",
   "dateModified": "{{ with .Params.lastmod }}{{ . }}{{ else }}{{ $.Date.Format "2006-01-02" }}{{ end }}",

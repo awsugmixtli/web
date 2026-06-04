@@ -34,20 +34,16 @@ sync:
 		--cache-control "no-cache" \
 		--delete
 
-	@echo "→ Uploading CSS + JS (fingerprinted → immutable, 1 year)"
-	aws s3 sync $(DIST)/css/ s3://$(BUCKET)/css/ $(AWS_FLAGS) \
-		--cache-control "public, max-age=31536000, immutable"
-	aws s3 sync $(DIST)/js/ s3://$(BUCKET)/js/ $(AWS_FLAGS) \
-		--cache-control "public, max-age=31536000, immutable"
-
-	@echo "→ Uploading fonts (immutable, 1 year)"
-	aws s3 sync $(DIST)/assets/ s3://$(BUCKET)/assets/ $(AWS_FLAGS) \
+	@echo "→ Uploading CSS + JS + fonts (fingerprinted/content-hashed → immutable, 1 year)"
+	aws s3 sync $(DIST)/ s3://$(BUCKET)/ $(AWS_FLAGS) \
 		--exclude "*" \
+		--include "*.css" \
+		--include "*.js" \
 		--include "*.woff2" \
 		--cache-control "public, max-age=31536000, immutable"
 
-	@echo "→ Uploading images + icons (1 week)"
-	aws s3 sync $(DIST)/assets/ s3://$(BUCKET)/assets/ $(AWS_FLAGS) \
+	@echo "→ Uploading images + icons, whole tree (1 week)"
+	aws s3 sync $(DIST)/ s3://$(BUCKET)/ $(AWS_FLAGS) \
 		--exclude "*" \
 		--include "*.avif" \
 		--include "*.png" \
@@ -55,6 +51,7 @@ sync:
 		--include "*.ico" \
 		--include "*.webp" \
 		--include "*.jpg" \
+		--include "*.jpeg" \
 		--cache-control "public, max-age=604800"
 
 	@echo "→ Uploading webmanifest (1 day)"
