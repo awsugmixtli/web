@@ -36,13 +36,13 @@ resource "aws_route53_record" "ses_dkim" {
 # ── Custom MAIL FROM subdomain (improves deliverability) ──
 resource "aws_sesv2_email_identity_mail_from_attributes" "domain" {
   email_identity   = aws_sesv2_email_identity.domain.email_identity
-  mail_from_domain = "mail.${var.domain_name}"
+  mail_from_domain = "ses.${var.domain_name}"
 }
 
 # MX record for MAIL FROM subdomain
 resource "aws_route53_record" "ses_mail_from_mx" {
   zone_id = data.aws_route53_zone.site.zone_id
-  name    = "mail.${var.domain_name}"
+  name    = "ses.${var.domain_name}"
   type    = "MX"
   ttl     = 300
   records = ["10 feedback-smtp.${var.aws_region}.amazonses.com"]
@@ -51,7 +51,7 @@ resource "aws_route53_record" "ses_mail_from_mx" {
 # SPF TXT record for MAIL FROM subdomain
 resource "aws_route53_record" "ses_mail_from_spf" {
   zone_id = data.aws_route53_zone.site.zone_id
-  name    = "mail.${var.domain_name}"
+  name    = "ses.${var.domain_name}"
   type    = "TXT"
   ttl     = 300
   records = ["v=spf1 include:amazonses.com ~all"]

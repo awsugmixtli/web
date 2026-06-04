@@ -3,10 +3,8 @@
 ###############################################################################
 
 resource "aws_acm_certificate" "site" {
-  provider = aws.us_east_1
-
   domain_name               = var.domain_name
-  subject_alternative_names = ["www.${var.domain_name}"]
+  subject_alternative_names = ["*.${var.domain_name}"]
   validation_method         = "DNS"
 
   lifecycle {
@@ -38,8 +36,6 @@ resource "aws_route53_record" "acm_validation" {
 }
 
 resource "aws_acm_certificate_validation" "site" {
-  provider = aws.us_east_1
-
   certificate_arn         = aws_acm_certificate.site.arn
   validation_record_fqdns = [for r in aws_route53_record.acm_validation : r.fqdn]
 }
