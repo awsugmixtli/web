@@ -20,6 +20,41 @@ resource "aws_cloudfront_origin_access_control" "site" {
   signing_protocol                  = "sigv4"
 }
 
+# ── Hugo URL rewriter — CloudFront Function (viewer-request) ─────────────────
+# S3 with OAC does not support directory indexes. This function rewrites
+# clean Hugo URLs to their physical S3 key:
+#   /eventos/        → /eventos/index.html
+#   /eventos/slug    → /eventos/slug/index.html
+# Paths with a file extension (CSS, JS, images, XML, txt…) pass through as-is.
+resource "aws_cloudfront_function" "url_rewrite" {
+  name    = "mixtli-hugo-index-rewrite"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  comment = "Rewrite Hugo directory URLs to /index.html for S3 OAC"
+
+  code = <<-JS
+    async function handler(event) {
+      const req = event.request;
+      let uri = req.uri;
+
+      // Already has a file extension — pass through to S3 as-is
+      if (/\.[a-zA-Z0-9]+$/.test(uri)) {
+        return req;
+      }
+
+      // Ends with / — append index.html
+      if (uri.endsWith('/')) {
+        req.uri = uri + 'index.html';
+        return req;
+      }
+
+      // No trailing slash, no extension — append /index.html
+      req.uri = uri + '/index.html';
+      return req;
+    }
+  JS
+}
+
 # ── Security headers — CloudFront Function (viewer-response) ──────────────────
 # A CloudFront Function is used instead of a Response Headers Policy so that
 # it works with the flat pricing tier and gives us full control over header
@@ -140,6 +175,12 @@ resource "aws_cloudfront_distribution" "site" {
 
     # Managed-CachingOptimized
     cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+
+    # Rewrite /path/ and /path → /path/index.html for S3 OAC
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.url_rewrite.arn
+    }
 
     # Inject security headers on every S3-served response
     function_association {
