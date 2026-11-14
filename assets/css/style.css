@@ -425,7 +425,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 8px 40px;
+  padding: 8px clamp(14px, 2.4vw, 40px);
   text-align: center;
 }
 .stat-number {
@@ -824,6 +824,17 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════════════════════ */
+/* Stats: 4 stats fit on one row down to ~900px, then 2×2 grid */
+@media (max-width: 900px) {
+  .stat-divider { display: none; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .stat-item { padding: 8px 16px; }
+}
+
 @media (max-width: 768px) {
   /* Hero */
   .hero-content {
@@ -862,17 +873,6 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     text-align: center;
   }
   .nav-toggle { display: flex; }
-
-  /* Stats */
-  .stat-divider { display: none; }
-  .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .stat-item { padding: 8px 16px; }
-  /* Odd item out (5 stats) spans the full row so the grid stays balanced */
-  .stat-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
 
   /* Pillars */
   .pillars-grid { grid-template-columns: 1fr 1fr; }

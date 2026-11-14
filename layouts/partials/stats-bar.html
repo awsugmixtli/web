@@ -2,11 +2,9 @@
   Community stats bar. Numbers come from data/stats.yaml.
   Context: dict with
     "members_label" (optional, default "Miembros")
-    "last"          (optional, "founded" [default] or "events_per_year")
 */ -}}
 {{- $s := site.Data.stats -}}
 {{- $membersLabel := .members_label | default "Miembros" -}}
-{{- $last := .last | default "founded" -}}
 <section class="stats-bar" aria-label="Estadísticas de la comunidad">
   <div class="container">
     <div class="stats-grid">
@@ -29,18 +27,6 @@
         <span class="stat-number">{{ partial "stat-number.html" $s.certifications }}</span>
         <span class="stat-label">Certificaciones logradas</span>
       </div>
-      <div class="stat-divider" aria-hidden="true"></div>
-      {{ if eq $last "events_per_year" }}
-      <div class="stat-item">
-        <span class="stat-number">{{ partial "stat-number.html" $s.events_per_year }}</span>
-        <span class="stat-label">Eventos por año</span>
-      </div>
-      {{ else }}
-      <div class="stat-item">
-        <span class="stat-number">{{ $s.founded.value }}</span>
-        <span class="stat-label">Fundado</span>
-      </div>
-      {{ end }}
     </div>
   </div>
 </section>
