@@ -22,7 +22,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -34,7 +34,7 @@ jobs:
         run: hugo --minify --buildFuture --cleanDestinationDir
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
@@ -43,22 +43,24 @@ jobs:
   # ── Job 2: Deploy site ────────────────────────────────────────────────────
   # Syncs dist/ to S3 with per-type Cache-Control headers and invalidates
   # CloudFront. Runs after build; uses OIDC — no long-lived AWS keys.
+  # NOTE: no `environment:` here on purpose. Declaring one changes the OIDC
+  # subject claim to `...:environment:<name>`, but the IAM role's trust policy
+  # (terraform/iam.tf) only allows `...:ref:refs/heads/main`.
   deploy-site:
     name: Deploy site
     needs: build
     runs-on: ubuntu-latest
-    environment: production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist/
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: us-east-1
@@ -76,11 +78,11 @@ jobs:
     name: Deploy Lambda
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Detect Lambda changes
         id: filter
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         with:
           filters: |
             sponsor:
@@ -88,7 +90,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: steps.filter.outputs.sponsor == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: us-east-1
