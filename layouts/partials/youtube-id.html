@@ -1,0 +1,15 @@
+{{- /*
+  Extracts a YouTube video ID from a URL.
+  Usage: {{ partial "youtube-id.html" $url }}
+  Supports youtu.be/, ?v=, and /embed/ URL forms. Returns "" if no match.
+*/ -}}
+{{- $url := . }}
+{{- $videoID := "" }}
+{{- if findRE `youtu\.be/([^?&]+)` $url }}
+  {{- $videoID = replaceRE `.*youtu\.be/([^?&]+).*` "$1" $url }}
+{{- else if findRE `[?&]v=([^&]+)` $url }}
+  {{- $videoID = replaceRE `.*[?&]v=([^&]+).*` "$1" $url }}
+{{- else if findRE `youtube\.com/embed/([^?&]+)` $url }}
+  {{- $videoID = replaceRE `.*youtube\.com/embed/([^?&]+).*` "$1" $url }}
+{{- end }}
+{{- return $videoID }}

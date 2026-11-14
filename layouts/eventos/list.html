@@ -1,0 +1,37 @@
+{{ define "main" }}
+<div class="container container--page">
+  <div class="section-header">
+    <span class="section-eyebrow">Comunidad</span>
+    <h1 class="section-title">Eventos</h1>
+    <p class="section-subtitle">Charlas técnicas, talleres y networking — todos los encuentros de AWS UG Mixtli.</p>
+  </div>
+
+  {{- $now := now }}
+  {{- $all := .Pages }}
+  {{- $upcoming := sort (where $all "Date" "gt" $now) "Date" "asc" }}
+  {{- $past := sort (where $all "Date" "le" $now) "Date" "desc" }}
+
+  {{ if $upcoming }}
+  <section class="events-section">
+    <h2 class="events-section-title">Próximos</h2>
+    <div class="events-list">
+      {{ range $upcoming }}
+      {{ partial "event-card-row.html" . }}
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  {{ if $past }}
+  <section class="events-section">
+    <h2 class="events-section-title">Realizados</h2>
+    <div class="events-list">
+      {{ range $past }}
+      {{ partial "event-card-row.html" . }}
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+</div>
+{{ end }}

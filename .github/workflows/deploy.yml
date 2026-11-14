@@ -1,0 +1,102 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Daily safety-net rebuild at 06:00 UTC (01:00 CDT / 00:00 CST)
+    # Flips upcoming → past events without a content push.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+# Minimal permissions — OIDC token for AWS auth, read for checkout.
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  # ── Job 1: Build ──────────────────────────────────────────────────────────
+  # Hugo builds, minifies, fingerprints CSS/JS, and injects SRI hashes.
+  # No Node or npm needed. Does not need AWS credentials.
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.162.0'
+          extended: true
+
+      - name: Build
+        run: hugo --minify --buildFuture --cleanDestinationDir
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  # ── Job 2: Deploy site ────────────────────────────────────────────────────
+  # Syncs dist/ to S3 with per-type Cache-Control headers and invalidates
+  # CloudFront. Runs after build; uses OIDC — no long-lived AWS keys.
+  deploy-site:
+    name: Deploy site
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Sync to S3
+        run: make sync BUCKET=${{ vars.S3_BUCKET }}
+
+      - name: Invalidate CloudFront
+        run: make invalidate DISTRIBUTION_ID=${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+
+  # ── Job 3: Deploy Lambda (only if source changed) ─────────────────────────
+  # Runs in parallel with build — Lambda deploy doesn't need the dist artifact.
+  # Skips AWS credentials entirely when no Lambda file changed.
+  deploy-lambda:
+    name: Deploy Lambda
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect Lambda changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            sponsor:
+              - 'lambda/index.py'
+
+      - name: Configure AWS credentials
+        if: steps.filter.outputs.sponsor == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy sponsor form Lambda
+        if: steps.filter.outputs.sponsor == 'true'
+        run: |
+          zip -j /tmp/index.zip lambda/index.py
+          aws lambda update-function-code \
+            --function-name mixtli-sponsor-form \
+            --zip-file fileb:///tmp/index.zip

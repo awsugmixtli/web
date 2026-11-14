@@ -1,0 +1,19 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ .Title | jsonify | safeJS }},
+  "description": {{ .Description | jsonify | safeJS }},
+  "url": "{{ .Permalink }}",
+  "datePublished": "{{ .Date.Format "2006-01-02" }}",
+  "dateModified": "{{ with .Params.lastmod }}{{ . }}{{ else }}{{ $.Date.Format "2006-01-02" }}{{ end }}",
+  "author": {
+    "@id": "https://awsugmixtli.com/#organization"
+  },
+  "publisher": { "@id": "https://awsugmixtli.com/#organization" },
+  "image": "{{ with .Params.og_image }}{{ if . }}{{ . }}{{ else }}https://awsugmixtli.com/assets/og-image.png{{ end }}{{ else }}https://awsugmixtli.com/assets/og-image.png{{ end }}",
+  "inLanguage": "es-MX",
+  "isPartOf": { "@id": "https://awsugmixtli.com/#website" }
+}
+</script>
+{{ partial "schema-breadcrumb.html" . }}

@@ -1,0 +1,18 @@
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is git-ignored — never commit real values.
+
+aws_region  = "us-east-1"
+domain_name = "awsugmixtli.com"
+to_email    = "hola@awsugmixtli.com"    # Where form submissions are sent
+from_email  = "noreply@awsugmixtli.com" # SES-verified sender
+
+# GitHub — used to scope the OIDC deploy role to a single repo + branch
+github_org  = "awsugmixtli"
+github_repo = "web"
+
+# Optional: WAF WebACL ARN (create in AWS Console first, then paste here)
+# web_acl_id = "arn:aws:wafv2:us-east-1:123456789012:global/webacl/YourACL/id"
+
+# Optional overrides
+# environment            = "production"
+# cloudfront_price_class = "PriceClass_100"

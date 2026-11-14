@@ -1,0 +1,30 @@
+{{ define "main" }}
+<div class="container container--page">
+  <div class="section-header">
+    <span class="section-eyebrow">Conocimiento</span>
+    <h1 class="section-title">Recursos</h1>
+    <p class="section-subtitle">Guías y artículos técnicos sobre AWS — escritos por y para la comunidad.</p>
+  </div>
+
+  <div class="articles-list">
+    {{ range .Pages.ByDate.Reverse }}
+    <article class="article-row">
+      <div class="article-row-meta">
+        <time class="article-row-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "2 Jan 2006" }}</time>
+      </div>
+      <div class="article-row-body">
+        <h2 class="article-row-title">
+          <a href="{{ .Permalink }}">{{ .Title }}</a>
+        </h2>
+        {{ with .Description }}<p class="article-row-desc">{{ . | truncate 200 }}</p>{{ end }}
+        {{ with .Params.tags }}
+        <div class="article-row-tags">
+          {{ range . }}<span class="tag-chip tag-chip-sm">{{ . }}</span>{{ end }}
+        </div>
+        {{ end }}
+      </div>
+    </article>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

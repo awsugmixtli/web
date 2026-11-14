@@ -1,0 +1,57 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": {{ .Title | jsonify | safeJS }},
+  "startDate": "{{ .Date.Format "2006-01-02T15:04:05-07:00" }}",
+  "endDate": "{{ with .Params.end_date }}{{ . | time.Format "2006-01-02T15:04:05-07:00" }}{{ else }}{{ .Date.Format "2006-01-02" }}T20:30:00-06:00{{ end }}",
+  "eventStatus": "https://schema.org/EventScheduled",
+  {{- if .Params.online }}
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "location": {
+    "@type": "VirtualLocation",
+    "url": {{ default .Permalink .Params.meetup_url | jsonify | safeJS }}
+  },
+  {{- else }}
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": {{ default "Workósfera Coworking" .Params.venue | jsonify | safeJS }},
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": {{ default "Cholula" .Params.locality | jsonify | safeJS }},
+      "addressRegion": "Puebla",
+      "addressCountry": "MX"
+    }
+  },
+  {{- end }}
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "MXN",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "{{ .PublishDate.Format "2006-01-02T15:04:05-07:00" }}"
+    {{- with .Params.meetup_url }},
+    "url": {{ . | jsonify | safeJS }}
+    {{- end }}
+  },
+  "organizer": { "@id": "https://awsugmixtli.com/#organization" },
+  "description": {{ .Description | jsonify | safeJS }},
+  "url": "{{ .Permalink }}",
+  "image": "{{ with .Params.og_image }}{{ if . }}{{ . }}{{ else }}https://awsugmixtli.com/assets/og-image.png{{ end }}{{ else }}https://awsugmixtli.com/assets/og-image.png{{ end }}"
+  {{- with .Params.attendees }},
+  "maximumAttendeeCapacity": {{ . }}{{ end }}
+  {{- if .Params.speakers }},
+  "performer": [
+    {{- range $i, $s := .Params.speakers }}{{ if $i }},{{ end }}
+    {
+      "@type": "Person",
+      "name": {{ $s.name | jsonify | safeJS }}
+      {{- with $s.linkedin }},"sameAs": {{ . | jsonify | safeJS }}{{ end }}
+    }
+    {{- end }}
+  ]
+  {{- end }}
+}
+</script>
+{{ if .IsPage }}{{ partial "schema-breadcrumb.html" . }}{{ end }}

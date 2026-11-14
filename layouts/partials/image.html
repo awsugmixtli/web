@@ -1,0 +1,111 @@
+{{- /*
+  Responsive image partial: <picture> with a WebP source plus an
+  original-format fallback, srcset-based, never upscaling past the
+  source image's natural width.
+
+  Usage:
+    {{ partial "image.html" (dict
+      "ctx"    .                                  (required, page whose Resources.GetMatch is used)
+      "src"    "gallery/foto.jpg"                  (required, resource-relative path)
+      "alt"    "Descripción de la foto"            (required)
+      "widths" (slice 400 800 1200)                (optional, defaults to (slice 400))
+      "sizes"  "(max-width: 600px) 100vw, 400px"   (optional)
+      "lcp"    false                               (optional, true = eager/high-priority)
+      "ratio"  "1x1"                               (optional "WxH" — crops via .Fill instead of .Resize)
+      "class"  "gallery-thumb"                     (optional, applied to the rendered <img>)
+    ) }}
+
+  Falls back to a plain <img loading="lazy"> when Resources.GetMatch finds
+  nothing for "src".
+*/ -}}
+{{- $ctx := .ctx }}
+{{- $src := .src }}
+{{- $alt := .alt }}
+{{- $widths := .widths | default (slice 400) }}
+{{- $sizes := .sizes }}
+{{- $lcp := .lcp | default false }}
+{{- $ratio := .ratio }}
+{{- $class := .class }}
+
+{{- $img := $ctx.Resources.GetMatch $src }}
+{{- if $img }}
+  {{- $srcW := $img.Width }}
+
+  {{- /* Never upscale past the source's natural width. */}}
+  {{- $usable := slice }}
+  {{- range $widths }}
+    {{- if le . $srcW }}
+      {{- $usable = $usable | append . }}
+    {{- end }}
+  {{- end }}
+  {{- if eq (len $usable) 0 }}
+    {{- $usable = slice $srcW }}
+  {{- end }}
+  {{- $usable = sort $usable }}
+
+  {{- /* Optional fixed aspect ratio (e.g. "1x1") crops via .Fill; otherwise .Resize keeps the source's aspect ratio. */}}
+  {{- $ratioW := 0 }}
+  {{- $ratioH := 0 }}
+  {{- with $ratio }}
+    {{- $parts := split . "x" }}
+    {{- if eq (len $parts) 2 }}
+      {{- $ratioW = int (index $parts 0) }}
+      {{- $ratioH = int (index $parts 1) }}
+    {{- end }}
+  {{- end }}
+
+  {{- $webpSet := slice }}
+  {{- $origSet := slice }}
+  {{- $fallback := "" }}
+  {{- $displayW := 0 }}
+  {{- $displayH := 0 }}
+
+  {{- range $usable }}
+    {{- $w := . }}
+    {{- if and $ratioW $ratioH }}
+      {{- $h := int (div (mul $w $ratioH) $ratioW) }}
+      {{- $spec := printf "%dx%d" $w $h }}
+      {{- $webp := $img.Fill (printf "%s webp" $spec) }}
+      {{- $orig := $img.Fill $spec }}
+      {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) }}
+      {{- $origSet = $origSet | append (printf "%s %dw" $orig.RelPermalink $w) }}
+      {{- $fallback = $orig.RelPermalink }}
+      {{- $displayW = $w }}
+      {{- $displayH = $h }}
+    {{- else }}
+      {{- $spec := printf "%dx" $w }}
+      {{- $webp := $img.Resize (printf "%s webp" $spec) }}
+      {{- $orig := $img.Resize $spec }}
+      {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) }}
+      {{- $origSet = $origSet | append (printf "%s %dw" $orig.RelPermalink $w) }}
+      {{- $fallback = $orig.RelPermalink }}
+      {{- $displayW = $w }}
+      {{- $displayH = $orig.Height }}
+    {{- end }}
+  {{- end }}
+
+  {{- $loading := "lazy" }}
+  {{- $decoding := "async" }}
+  {{- $fetchpriority := "" }}
+  {{- if $lcp }}
+    {{- $loading = "eager" }}
+    {{- $decoding = "sync" }}
+    {{- $fetchpriority = "high" }}
+  {{- end }}
+<picture>
+  <source type="image/webp" srcset="{{ delimit $webpSet ", " }}"{{ with $sizes }} sizes="{{ . }}"{{ end }}>
+  <img
+    srcset="{{ delimit $origSet ", " }}"
+    {{- with $sizes }} sizes="{{ . }}"{{ end }}
+    src="{{ $fallback }}"
+    alt="{{ $alt }}"
+    width="{{ $displayW }}"
+    height="{{ $displayH }}"
+    loading="{{ $loading }}"
+    decoding="{{ $decoding }}"
+    {{- with $fetchpriority }} fetchpriority="{{ . }}"{{ end }}
+    {{- with $class }} class="{{ . }}"{{ end }}>
+</picture>
+{{- else }}
+<img src="{{ $src }}" alt="{{ $alt }}" loading="lazy"{{ with $class }} class="{{ . }}"{{ end }}>
+{{- end }}

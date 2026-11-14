@@ -1,0 +1,18 @@
+{{ with .Params.youtube_url }}
+{{- $videoID := partial "youtube-id.html" . }}
+{{- if $videoID }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": {{ $.Title | jsonify | safeJS }},
+  "description": {{ $.Description | jsonify | safeJS }},
+  "thumbnailUrl": "https://i.ytimg.com/vi/{{ $videoID }}/hqdefault.jpg",
+  "uploadDate": "{{ $.Date.Format "2006-01-02" }}",
+  "embedUrl": "https://www.youtube-nocookie.com/embed/{{ $videoID }}",
+  "url": "https://www.youtube.com/watch?v={{ $videoID }}",
+  "publisher": { "@id": "https://awsugmixtli.com/#organization" }
+}
+</script>
+{{- end }}
+{{ end }}

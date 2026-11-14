@@ -1,0 +1,16 @@
+{{ with .Params.youtube_url }}
+{{- $videoID := partial "youtube-id.html" . }}
+{{- if $videoID }}
+<div class="youtube-wrap">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/{{ $videoID }}"
+    title="{{ $.Title }}"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+    loading="lazy"
+    class="youtube-iframe">
+  </iframe>
+</div>
+{{- end }}
+{{ end }}

@@ -1,0 +1,16 @@
+{{ define "main" }}
+<section class="section" style="min-height: calc(100vh - var(--nav-h)); display: flex; align-items: center;">
+  <div class="container" style="text-align: center;">
+    <p class="section-eyebrow">Error 404</p>
+    <h1 class="section-title" style="font-size: clamp(4rem, 12vw, 8rem); color: var(--color-purple);">404</h1>
+    <p class="section-subtitle" style="margin-bottom: 32px;">
+      Esta página no existe o fue movida.<br>
+      Vuelve al inicio o navega a los eventos.
+    </p>
+    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href="/" class="btn btn-primary">← Ir al inicio</a>
+      <a href="/eventos/" class="btn btn-ghost">Ver eventos</a>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,43 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#161E2D">
+
+  <title>
+    {{- if .IsHome -}}
+      {{ .Title }}
+    {{- else -}}
+      {{ .Title }} | AWS UG Mixtli
+    {{- end -}}
+  </title>
+
+  {{ partial "seo-meta.html" . }}
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Font preloads (stable URLs — not fingerprinted per §10.3) -->
+  <link rel="preload" href="/assets/fonts/ember-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/assets/fonts/ember-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/assets/fonts/ember-heavy.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+  <!-- Styles -->
+  {{- $css := resources.Get "css/style.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+  {{- if eq .Section "patrocinar" }}
+  {{- $sponsorCss := resources.Get "css/sponsor.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $sponsorCss.RelPermalink }}" integrity="{{ $sponsorCss.Data.Integrity }}" crossorigin="anonymous">
+  {{- end }}
+  {{- if eq .Layout "certification-challenge" }}
+  {{- $challengeCss := resources.Get "css/challenge.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $challengeCss.RelPermalink }}" integrity="{{ $challengeCss.Data.Integrity }}" crossorigin="anonymous">
+  {{- end }}
+
+  <!-- Structured data -->
+  {{ partial "schema.html" . }}
+</head>

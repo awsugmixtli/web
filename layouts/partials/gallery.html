@@ -1,0 +1,25 @@
+{{ with .Params.gallery }}
+{{ if gt (len .) 0 }}
+<div class="gallery-grid">
+  {{ range $i, $filename := . }}
+    {{ $img := $.Page.Resources.GetMatch (printf "gallery/%s" $filename) }}
+    {{ if $img }}
+      <button class="gallery-thumb-btn" onclick="document.getElementById('lightbox-{{ $i }}').showModal()" aria-label="Ver foto {{ add $i 1 }}">
+        {{ partial "image.html" (dict
+          "ctx" $.Page
+          "src" (printf "gallery/%s" $filename)
+          "alt" (printf "Foto %d del evento %s" (add $i 1) $.Page.Title)
+          "widths" (slice 400 800)
+          "sizes" "(max-width: 640px) 50vw, 300px"
+          "class" "gallery-thumb"
+        ) }}
+      </button>
+      <dialog id="lightbox-{{ $i }}" class="lightbox" onclick="this.close()">
+        <img src="{{ $img.RelPermalink }}" alt="Foto {{ add $i 1 }} del evento {{ $.Page.Title }}" class="lightbox-img">
+        <button class="lightbox-close" onclick="document.getElementById('lightbox-{{ $i }}').close()" aria-label="Cerrar">✕</button>
+      </dialog>
+    {{ end }}
+  {{ end }}
+</div>
+{{ end }}
+{{ end }}

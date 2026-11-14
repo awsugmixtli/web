@@ -1,0 +1,48 @@
+{{ with .Params.speakers }}
+<div class="speakers-grid">
+  {{ range . }}
+  {{- $speaker := . }}
+  <div class="speaker-card-hero">
+    <div class="speaker-avatar-wrap">
+      {{ with .photo }}
+        {{ $img := $.Page.Resources.GetMatch . }}
+        {{ if $img }}
+          {{ partial "image.html" (dict
+            "ctx" $.Page
+            "src" .
+            "alt" $speaker.name
+            "widths" (slice 80 160)
+            "sizes" "80px"
+            "ratio" "1x1"
+            "class" "speaker-avatar"
+          ) }}
+        {{ else }}
+          <div class="speaker-avatar-placeholder">{{ substr $speaker.name 0 1 }}</div>
+        {{ end }}
+      {{ else }}
+        <div class="speaker-avatar-placeholder">{{ substr $speaker.name 0 1 }}</div>
+      {{ end }}
+    </div>
+    <div class="speaker-details">
+      <span class="speaker-name-lg">{{ $speaker.name }}</span>
+      {{ with $speaker.role }}<span class="speaker-role-lg">{{ . }}</span>{{ end }}
+      {{ with $speaker.bio }}<p class="speaker-bio">{{ . }}</p>{{ end }}
+      {{ if or $speaker.linkedin $speaker.website }}
+      <div class="speaker-links">
+        {{ with $speaker.linkedin }}
+        <a href="{{ . }}" target="_blank" rel="noopener" class="speaker-social-link" aria-label="LinkedIn de {{ $speaker.name }}">
+          LinkedIn ↗
+        </a>
+        {{ end }}
+        {{ with $speaker.website }}
+        <a href="{{ . }}" target="_blank" rel="noopener" class="speaker-social-link" aria-label="Sitio web de {{ $speaker.name }}">
+          Sitio web ↗
+        </a>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+</div>
+{{ end }}
