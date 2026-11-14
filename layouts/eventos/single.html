@@ -10,9 +10,14 @@
         <span class="event-meta-item">📅 {{ .Date | time.Format "2 January 2006" }}</span>
         <span class="event-meta-sep">·</span>
         <span class="event-meta-item">🕕 {{ .Date | time.Format "3:04 PM" }}</span>
+        {{ if .Params.online }}
+        <span class="event-meta-sep">·</span>
+        <span class="event-meta-item">🌐 Online</span>
+        {{ else }}
         {{ with .Params.venue }}
         <span class="event-meta-sep">·</span>
         <span class="event-meta-item">📍 {{ . }}{{ with $.Params.locality }}, {{ . }}{{ end }}</span>
+        {{ end }}
         {{ end }}
       </div>
 
@@ -35,6 +40,17 @@
         {{ end }}
       </div>
     </header>
+
+    {{- $banner := .Resources.GetMatch "banner.*" }}
+    {{- if $banner }}
+    <div class="event-banner">
+      <img src="{{ $banner.RelPermalink }}"
+           alt="Banner: {{ .Title }}"
+           width="{{ $banner.Width }}"
+           height="{{ $banner.Height }}"
+           loading="lazy">
+    </div>
+    {{- end }}
 
     {{ with .Params.speakers }}
     <section class="event-section event-speakers-section">

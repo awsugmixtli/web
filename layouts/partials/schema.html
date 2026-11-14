@@ -1,4 +1,4 @@
-{{ partial "schema-org.html" . }}
+{{ partialCached "schema-org.html" . site.Language.Lang }}
 {{ if .IsHome }}
   {{- $now := now }}
   {{- $upcoming := where (where site.RegularPages "Section" "eventos") "Date" "gt" $now }}

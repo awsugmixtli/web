@@ -8,7 +8,7 @@
     <span class="event-time">{{ .Date | time.Format "3:04 PM" }}</span>
   </div>
   <h3 class="event-title">{{ .Title }}</h3>
-  {{ with .Params.venue }}<p class="event-venue">📍 {{ . }}</p>{{ end }}
+  {{ if .Params.online }}<p class="event-venue">🌐 Online</p>{{ else }}{{ with .Params.venue }}<p class="event-venue">📍 {{ . }}</p>{{ end }}{{ end }}
   <div class="event-ctas">
     <a href="{{ .Params.meetup_url | default "https://www.meetup.com/awsugmixtli/" }}"
        target="_blank" rel="noopener" class="btn btn-primary event-btn">

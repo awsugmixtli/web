@@ -7,8 +7,15 @@
       {{ with .photo }}
         {{ $img := $.Page.Resources.GetMatch . }}
         {{ if $img }}
-          {{ $thumb := $img.Fill "160x160 webp" }}
-          <img src="{{ $thumb.RelPermalink }}" alt="{{ $speaker.name }}" class="speaker-avatar" loading="lazy" width="160" height="160">
+          {{ partial "image.html" (dict
+            "ctx" $.Page
+            "src" .
+            "alt" $speaker.name
+            "widths" (slice 80 160)
+            "sizes" "80px"
+            "ratio" "1x1"
+            "class" "speaker-avatar"
+          ) }}
         {{ else }}
           <div class="speaker-avatar-placeholder">{{ substr $speaker.name 0 1 }}</div>
         {{ end }}
@@ -20,10 +27,19 @@
       <span class="speaker-name-lg">{{ $speaker.name }}</span>
       {{ with $speaker.role }}<span class="speaker-role-lg">{{ . }}</span>{{ end }}
       {{ with $speaker.bio }}<p class="speaker-bio">{{ . }}</p>{{ end }}
-      {{ with $speaker.linkedin }}
-      <a href="{{ . }}" target="_blank" rel="noopener" class="speaker-social-link" aria-label="LinkedIn de {{ $speaker.name }}">
-        LinkedIn ↗
-      </a>
+      {{ if or $speaker.linkedin $speaker.website }}
+      <div class="speaker-links">
+        {{ with $speaker.linkedin }}
+        <a href="{{ . }}" target="_blank" rel="noopener" class="speaker-social-link" aria-label="LinkedIn de {{ $speaker.name }}">
+          LinkedIn ↗
+        </a>
+        {{ end }}
+        {{ with $speaker.website }}
+        <a href="{{ . }}" target="_blank" rel="noopener" class="speaker-social-link" aria-label="Sitio web de {{ $speaker.name }}">
+          Sitio web ↗
+        </a>
+        {{ end }}
+      </div>
       {{ end }}
     </div>
   </div>

@@ -871,6 +871,8 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     gap: 20px;
   }
   .stat-item { padding: 8px 16px; }
+  /* Odd item out (5 stats) spans the full row so the grid stays balanced */
+  .stat-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
 
   /* Pillars */
   .pillars-grid { grid-template-columns: 1fr 1fr; }
@@ -893,6 +895,8 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 
 /* ── Generic prose / fallback pages ────────────────────── */
 .container-narrow { max-width: 760px; }
+/* Offset for pages whose first child is the main content (nav is fixed/overlapping) */
+.container--page { padding-top: calc(var(--nav-h) + 64px); }
 .page-header { padding: 48px 0 32px; }
 .page-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; }
 .page-description { margin-top: 12px; color: var(--text-muted); font-size: 1.05rem; }
@@ -1052,6 +1056,22 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   overflow: hidden;
 }
 .event-row-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag-chip {
+  display: inline-block;
+  font-size: .75rem;
+  font-family: var(--font-ember-bold);
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: rgba(161,102,255,.15);
+  color: var(--color-purple);
+  border: 1px solid rgba(161,102,255,.25);
+  white-space: nowrap;
+  transition: background .2s, border-color .2s;
+}
+.tag-chip:hover {
+  background: rgba(161,102,255,.28);
+  border-color: rgba(161,102,255,.5);
+}
 .tag-chip-sm {
   font-size: .65rem;
   padding: 2px 8px;
@@ -1135,6 +1155,17 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   flex-wrap: wrap;
 }
 
+.event-banner {
+  margin: 0 auto 56px;
+  text-align: center;
+}
+.event-banner img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
 .event-body {
   max-width: 760px;
   margin: 0 auto 48px;
@@ -1153,6 +1184,24 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   margin: 0 0 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+/* YouTube embed — 16:9 responsive */
+.youtube-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.youtube-wrap .youtube-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .event-nav {
@@ -1254,9 +1303,14 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   line-height: 1.6;
   margin: 6px 0 0;
 }
+.speaker-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 8px;
+}
 .speaker-social-link {
   display: inline-block;
-  margin-top: 8px;
   font-size: .78rem;
   font-weight: 700;
   color: var(--accent);

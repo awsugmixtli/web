@@ -31,8 +31,10 @@ El dominio awspuebla.com redirige a este sitio (awsugmixtli.com), ya que AWS UG 
 
 - Fundación: septiembre 2024
 - Ubicación: Cholula, Puebla, México (área metropolitana de Puebla)
-- Miembros: 400+
-- Calificación en Meetup: 4.9 ★
+- Miembros: {{ site.Data.stats.members.value }}+
+- Eventos realizados: {{ site.Data.stats.events.value }}+
+- Calificación en Meetup: {{ site.Data.stats.rating.value }} ★
+- Certificaciones AWS logradas por miembros: {{ site.Data.stats.certifications.value }}+
 - Sitio web: https://awsugmixtli.com
 - También accesible desde: https://awspuebla.com
 

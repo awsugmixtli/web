@@ -1,6 +1,6 @@
 ---
 title: "Patrocina al AWS UG Mixtli"
-description: "Conecta tu empresa con más de 400 profesionales AWS en Puebla. Conoce las opciones de patrocinio."
+description: "Conecta tu empresa con cientos de profesionales AWS en Puebla. Conoce las opciones de patrocinio."
 layout: "single"
 aliases:
   - /sponsor.html

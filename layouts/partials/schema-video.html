@@ -1,12 +1,5 @@
 {{ with .Params.youtube_url }}
-{{- $videoID := "" }}
-{{- if findRE `youtu\.be/([^?&]+)` . }}
-  {{- $videoID = replaceRE `.*youtu\.be/([^?&]+).*` "$1" . }}
-{{- else if findRE `[?&]v=([^&]+)` . }}
-  {{- $videoID = replaceRE `.*[?&]v=([^&]+).*` "$1" . }}
-{{- else if findRE `youtube\.com/embed/([^?&]+)` . }}
-  {{- $videoID = replaceRE `.*youtube\.com/embed/([^?&]+).*` "$1" . }}
-{{- end }}
+{{- $videoID := partial "youtube-id.html" . }}
 {{- if $videoID }}
 <script type="application/ld+json">
 {

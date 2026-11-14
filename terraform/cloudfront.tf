@@ -37,6 +37,18 @@ resource "aws_cloudfront_function" "url_rewrite" {
       const req = event.request;
       let uri = req.uri;
 
+      // 301 redirects for legacy static-site URLs
+      const redirects = {
+        '/sponsor.html': '/patrocinar/',
+      };
+      if (redirects[uri]) {
+        return {
+          statusCode: 301,
+          statusDescription: 'Moved Permanently',
+          headers: { location: { value: redirects[uri] } },
+        };
+      }
+
       // Already has a file extension — pass through to S3 as-is
       if (/\.[a-zA-Z0-9]+$/.test(uri)) {
         return req;
@@ -169,7 +181,7 @@ resource "aws_cloudfront_distribution" "site" {
   default_cache_behavior {
     target_origin_id       = "s3-${var.domain_name}"
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     compress               = true
 
@@ -220,7 +232,7 @@ resource "aws_cloudfront_distribution" "site" {
   }
 
   tags = {
-    Name        = "${var.domain_name}-cdn"
+    Name        = "${var.domain_name}"
     Environment = var.environment
   }
 

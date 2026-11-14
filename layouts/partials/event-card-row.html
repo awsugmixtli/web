@@ -8,7 +8,7 @@
     <h3 class="event-row-title">
       <a href="{{ .RelPermalink }}">{{ .Title }}</a>
     </h3>
-    {{ with .Params.venue }}<p class="event-row-venue">📍 {{ . }}</p>{{ end }}
+    {{ if .Params.online }}<p class="event-row-venue">🌐 Online</p>{{ else }}{{ with .Params.venue }}<p class="event-row-venue">📍 {{ . }}</p>{{ end }}{{ end }}
     {{ with .Description }}<p class="event-row-desc">{{ . | truncate 160 }}</p>{{ end }}
     {{ with .Params.tags }}
     <div class="event-row-tags">

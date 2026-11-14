@@ -1,15 +1,18 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # AWS UG Mixtli — Build & Deploy
 #
-# Local full deploy:
-#   make all BUCKET=awsugmixtli.com DISTRIBUTION_ID=EXXXXXXXXXXXXXX
+# Local full deploy (values auto-read from Terraform state):
+#   make all
 #
-# CI (GitHub Actions) calls build, sync, and invalidate as separate steps.
-# Get DISTRIBUTION_ID from: cd terraform && terraform output -raw cloudfront_distribution_id
+# Override explicitly if needed:
+#   make sync BUCKET=awsugmixtli DISTRIBUTION_ID=EXXXXXXXXXXXXXX
+#
+# CI sets BUCKET and DISTRIBUTION_ID via GitHub Actions repository variables;
+# the ?= assignments below are skipped when those are already defined.
 # ─────────────────────────────────────────────────────────────────────────────
 
-BUCKET            ?= awsugmixtli.com
-DISTRIBUTION_ID   ?= $(error Set DISTRIBUTION_ID or run: export DISTRIBUTION_ID=$$(cd terraform && terraform output -raw cloudfront_distribution_id))
+BUCKET          ?= $(shell terraform -chdir=terraform output -raw s3_bucket_name 2>/dev/null)
+DISTRIBUTION_ID ?= $(shell terraform -chdir=terraform output -raw cloudfront_distribution_id 2>/dev/null)
 DIST              ?= dist
 
 AWS_FLAGS := --region us-east-1
@@ -21,7 +24,7 @@ all: build sync invalidate
 
 # Hugo builds, minifies, fingerprints, and injects SRI — no Node needed.
 build:
-	hugo --minify
+	hugo --minify --buildFuture
 
 # CI entry point: sync pre-built dist/ artifact then invalidate
 deploy: sync invalidate

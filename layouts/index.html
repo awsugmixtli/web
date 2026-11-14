@@ -32,31 +32,7 @@
   <!-- ═══════════════════════════════════════
        STATS BAR
   ═══════════════════════════════════════ -->
-  <section class="stats-bar" aria-label="Estadísticas de la comunidad">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <span class="stat-number">{{ .Params.stats.members | default "400+" }}</span>
-          <span class="stat-label">Miembros</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number">{{ .Params.stats.events | default "15+" }}</span>
-          <span class="stat-label">Eventos realizados</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number">{{ .Params.stats.rating | default "4.9" }}<span class="stat-star">★</span></span>
-          <span class="stat-label">Calificación en Meetup</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number">{{ .Params.stats.founded | default "2024" }}</span>
-          <span class="stat-label">Fundado</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  {{ partial "stats-bar.html" (dict) }}
 
   <!-- ═══════════════════════════════════════
        ABOUT

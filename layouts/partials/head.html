@@ -33,6 +33,10 @@
   {{- $sponsorCss := resources.Get "css/sponsor.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $sponsorCss.RelPermalink }}" integrity="{{ $sponsorCss.Data.Integrity }}" crossorigin="anonymous">
   {{- end }}
+  {{- if eq .Layout "certification-challenge" }}
+  {{- $challengeCss := resources.Get "css/challenge.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $challengeCss.RelPermalink }}" integrity="{{ $challengeCss.Data.Integrity }}" crossorigin="anonymous">
+  {{- end }}
 
   <!-- Structured data -->
   {{ partial "schema.html" . }}

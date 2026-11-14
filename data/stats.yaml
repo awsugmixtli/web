@@ -1,0 +1,9 @@
+# Community stats — single source of truth.
+# Used by: home stats bar, sponsor page (stats + hero), llms.txt.
+# Update numbers here only. Values are shown with a trailing "+" where `plus: true`.
+members:        { value: 640,   plus: true }
+events:         { value: 25,    plus: true }
+certifications: { value: 10,    plus: true }
+events_per_year: { value: 6,    plus: true }
+rating:         { value: "5.0" }   # Meetup rating (string keeps the trailing .0)
+founded:        { value: 2024 }

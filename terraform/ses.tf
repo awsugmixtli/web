@@ -44,7 +44,7 @@ resource "aws_route53_record" "ses_mail_from_mx" {
   zone_id = data.aws_route53_zone.site.zone_id
   name    = "ses.${var.domain_name}"
   type    = "MX"
-  ttl     = 300
+  ttl     = 3600
   records = ["10 feedback-smtp.${var.aws_region}.amazonses.com"]
 }
 
@@ -53,7 +53,7 @@ resource "aws_route53_record" "ses_mail_from_spf" {
   zone_id = data.aws_route53_zone.site.zone_id
   name    = "ses.${var.domain_name}"
   type    = "TXT"
-  ttl     = 300
+  ttl     = 3600
   records = ["v=spf1 include:amazonses.com ~all"]
 }
 
@@ -62,7 +62,6 @@ resource "aws_route53_record" "dmarc" {
   zone_id = data.aws_route53_zone.site.zone_id
   name    = "_dmarc.${var.domain_name}"
   type    = "TXT"
-  ttl     = 300
-  # p=none: monitor only. Switch to p=quarantine/reject once DKIM is confirmed working.
-  records = ["v=DMARC1; p=none; rua=mailto:${var.to_email}"]
+  ttl     = 3600
+  records = ["v=DMARC1;p=reject;sp=reject;pct=100;ri=86400;aspf=r;adkim=s;fo=1;"]
 }

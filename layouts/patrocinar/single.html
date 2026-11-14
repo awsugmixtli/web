@@ -9,7 +9,7 @@
       <span class="section-eyebrow">Patrocinadores</span>
       <h1 class="sponsor-hero-title">Impulsa tu marca con<br>la comunidad AWS de Puebla</h1>
       <p class="sponsor-hero-subtitle">
-        Conecta con más de 400 profesionales, estudiantes y líderes técnicos
+        Conecta con más de {{ site.Data.stats.members.value }} profesionales, estudiantes y líderes técnicos
         que construyen el futuro en la nube — desde Cholula para México.
       </p>
       <a href="#contact-form" class="btn btn-primary">Quiero patrocinar</a>
@@ -19,31 +19,7 @@
   <!-- ═══════════════════════════════════════
        COMMUNITY STATS
   ═══════════════════════════════════════ -->
-  <section class="stats-bar" aria-label="Estadísticas de la comunidad">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <span class="stat-number">400<span class="stat-plus">+</span></span>
-          <span class="stat-label">Miembros activos</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number">15<span class="stat-plus">+</span></span>
-          <span class="stat-label">Eventos realizados</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number">4.9<span class="stat-star">★</span></span>
-          <span class="stat-label">Calificación en Meetup</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number">6<span class="stat-plus">+</span></span>
-          <span class="stat-label">Eventos por año</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  {{ partial "stats-bar.html" (dict "members_label" "Miembros activos" "last" "events_per_year") }}
 
   <!-- ═══════════════════════════════════════
        BENEFITS
@@ -140,7 +116,7 @@
 {{ end }}
 
 {{ define "scripts" }}
-{{- $js := resources.Get "js/main.js" | minify | fingerprint }}
+{{- $js := resources.Get "js/main.js" | js.Build (dict "minify" true) | resources.Fingerprint "sha256" }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer crossorigin="anonymous"></script>
 {{- $sponsorJs := resources.Get "js/sponsor.js" | minify | fingerprint }}
 <script src="{{ $sponsorJs.RelPermalink }}" integrity="{{ $sponsorJs.Data.Integrity }}" defer crossorigin="anonymous"></script>
