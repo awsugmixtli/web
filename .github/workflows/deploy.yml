@@ -43,11 +43,13 @@ jobs:
   # ── Job 2: Deploy site ────────────────────────────────────────────────────
   # Syncs dist/ to S3 with per-type Cache-Control headers and invalidates
   # CloudFront. Runs after build; uses OIDC — no long-lived AWS keys.
+  # NOTE: no `environment:` here on purpose. Declaring one changes the OIDC
+  # subject claim to `...:environment:<name>`, but the IAM role's trust policy
+  # (terraform/iam.tf) only allows `...:ref:refs/heads/main`.
   deploy-site:
     name: Deploy site
     needs: build
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
 
