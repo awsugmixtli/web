@@ -39,6 +39,8 @@ jobs:
           name: dist
           path: dist/
           retention-days: 1
+          # dist/.well-known/security.txt is a hidden path; excluded by default
+          include-hidden-files: true
 
   # ── Job 2: Deploy site ────────────────────────────────────────────────────
   # Syncs dist/ to S3 with per-type Cache-Control headers and invalidates
